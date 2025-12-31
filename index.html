@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year Silpi ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Syncopate:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --primary: #00f2ff; --accent: #ff007a; --bg: #050505; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Poppins', sans-serif; color: white; }
+        
+        .page { display: none; height: 100vh; width: 100vw; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: absolute; top: 0; left: 0; }
+        .active { display: flex; animation: fadeIn 0.8s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* PAGE 1: CYBERPUNK NEON GRID (No Image Needed) */
+        #page1 {
+            background: linear-gradient(to bottom, #000 0%, #111 100%);
+            background-image: linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center bottom;
+            perspective: 500px;
+        }
+        #page1::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+        .cyber-circle {
+            z-index: 5; width: 250px; height: 250px; border-radius: 50%;
+            border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 50px var(--primary); background: rgba(0,0,0,0.8);
+        }
+        .cyber-btn { 
+            background: none; border: none; color: white; font-family: 'Syncopate', sans-serif;
+            font-size: 1.1rem; cursor: pointer; letter-spacing: 5px; animation: pulse 1.5s infinite;
+        }
+
+        /* PAGE 2: MESSAGE CARD */
+        #page2 { background: #fdf2f2; color: #333; }
+        .glass-card {
+            background: white; padding: 40px 20px; border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 85%; max-width: 400px;
+        }
+        .cat-img { width: 120px; margin-bottom: 20px; }
+        .typewriter { font-size: 1.3rem; font-weight: 600; line-height: 1.5; color: #444; min-height: 100px; }
+        .next-btn { margin-top: 30px; padding: 15px 40px; background: #333; color: white; border: none; border-radius: 50px; cursor: pointer; }
+
+        /* PAGE 3: FIREWORKS FINALE (No Image Needed) */
+        #page3 { background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); }
+        .hny-text { 
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 4rem;
+            text-transform: uppercase; line-height: 0.9; z-index: 10;
+        }
+        .silpi-name {
+            display: block; font-size: 5rem; color: var(--primary);
+            text-transform: none; text-shadow: 0 0 20px var(--primary); margin-top: 10px;
+        }
+        .secret-note { position: absolute; bottom: 40px; padding: 0 20px; font-size: 0.85rem; color: #888; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+    </style>
+</head>
+<body>
+
+    <div id="page1" class="page active">
+        <div class="cyber-circle">
+            <button class="cyber-btn" onclick="showPage(2)">ENTER 2026</button>
+        </div>
+    </div>
+
+    <div id="page2" class="page">
+        <div class="glass-card">
+            <img src="https://media.tenor.com/7S_E6u66_84AAAAi/peach-goma.gif" alt="Cute Cat" class="cat-img">
+            <div id="text" class="typewriter"></div>
+            <button id="btn2" class="next-btn" style="display:none;" onclick="showPage(3)">CONTINUE</button>
+        </div>
+    </div>
+
+    <div id="page3" class="page">
+        <h1 class="hny-text">Happy<br>New Year<br><span class="silpi-name">Silpi</span></h1>
+        <div class="secret-note">As 2026 begins, I hope we continue this—whatever this beautiful thing is—into the new year, together. ✨</div>
+    </div>
+
+    <script>
+        const message = "I met you in December 2025, and somehow that was enough to make the whole year feel good. Even though I found you at the very end, you became the best part of my year. Thank you for coming into my life.";
+        
+        function showPage(pageNo) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + pageNo).classList.add('active');
+
+            if(pageNo === 2) {
+                let i = 0;
+                function type() {
+                    if (i < message.length) {
+                        document.getElementById('text').innerHTML += message.charAt(i);
+                        i++; setTimeout(type, 30);
+                    } else { document.getElementById('btn2').style.display = "inline-block"; }
+                }
+                type();
+            }
+            if(pageNo === 3) { launchFireworks(); }
+        }
+
+        function launchFireworks() {
+            let end = Date.now() + (10 * 1000);
+            (function frame() {
+                confetti({ particleCount: 10, spread: 90, origin: { y: 0.6 }, colors: ['#00f2ff', '#ff007a', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
